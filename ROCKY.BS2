@@ -38,11 +38,11 @@ Music DATA "A", 2, "C", 1, "A", 1, "R", 8,
            "A", 2, "G", 2, "E", 4,
            "Q", 0
 
-GOSUB EyeOfTheTiger
+GOSUB MusicPlayer
 DEBUG "PROGRAM END", CR
 END
 
-EyeOfTheTiger:
+MusicPlayer:
 
     DO UNTIL (note = "Q")
         RANDOM seed        
