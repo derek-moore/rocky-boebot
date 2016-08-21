@@ -1,0 +1,62 @@
+'This program will make your BEBOT dance and sing to a popular 80's tune.
+'You will need a speaker, be sure to set the correct pin number.
+
+'{$STAMP BS2}
+'{$PBASIC 2.5}
+
+DEBUG "PROGRAM START", CR
+
+note VAR Byte
+freq VAR Word
+duration VAR Byte
+addr VAR Byte
+counter VAR Byte
+seed VAR Word
+seed = 31415
+
+Speaker PIN 4  'Update with correct speaker port
+Sixteenth CON 125  'One sixteenth of a duration.  So to play (or rest) for an eighth, use two Sixteenths
+Notes DATA Word 1760, Word 1875, Word 1046, Word 1175, Word 1318, Word 1370, Word 1568  'Notes A B C D E F G
+
+' "R" is a rest
+Music DATA "A", 2, "C", 1, "A", 1, "R", 8, 
+           "G", 2, "F", 2, "A", 2, "G", 2, "F", 2, "R", 12,
+           "R", 4, "G", 1, "G", 2, "G", 2, "R", 3, "G", 2, "A", 2,
+           "G", 2, "F", 2, "F", 4, "R", 12,
+           "R", 4, "A", 2, "C", 1, "D", 3, "A", 2, "G", 2, "F", 2,
+           "A", 3, "F", 3, "G", 3, "F", 4, "E", 2, "F", 1, "G", 1,
+           "G", 1, "R", 3, "G", 2, "F", 2, "G", 4, "G", 2, "F", 2, "A", 2,
+           "F", 1, "R", 9, "G", 3, "A", 3,
+           "R", 2, "B", 2, "B", 2, "B", 1, "B", 3, "A", 2, "G", 2, "F", 2,
+           "F", 2, "G", 2, "A", 2, "G", 2, "R", 2, "G", 3, "A", 3,
+           "B", 2, "R", 2, "B", 2, "B", 1, "B", 3, "A", 2, "G", 2, "F", 2,
+           "A", 2, "G", 2, "G", 4, "R", 2, "G", 3, "A", 3,  
+           "B", 2, "R", 2, "B", 2, "B", 1, "B", 3, "A", 2, "G", 2, "F", 2,
+           "F", 2, "G", 2, "A", 2, "G", 2, "R", 2, "G", 2, "A", 3,
+           "B", 4, "F", 4, "B", 4, "C", 4, "B", 4, "D", 2,
+           "D", 8, "D", 2, "R", 4, "G", 2, "F", 1, "G", 2, 
+           "A", 2, "G", 2, "E", 4,
+           "Q", 0
+
+GOSUB EyeOfTheTiger
+DEBUG "PROGRAM END", CR
+END
+
+EyeOfTheTiger:
+
+    DO UNTIL (note = "Q")
+        RANDOM seed        
+        PULSOUT 13, 650 + (seed // 200)
+        PULSOUT 12, 650 + (seed // 200)        
+        
+        READ Music + addr, note, duration
+        addr = addr + 2
+        IF (note = "R") THEN                
+          PAUSE duration * Sixteenth
+        ELSEIF (note <> "Q") THEN
+          READ Notes + ((note - 65) * 2), Word freq          
+          FREQOUT Speaker, duration * Sixteenth, freq
+        ENDIF    
+    LOOP 
+    
+    RETURN
