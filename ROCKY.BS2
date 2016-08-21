@@ -1,4 +1,4 @@
-'This program will make your BEBOT dance and sing to a popular 80's tune.
+'This program will make your BOEBOT dance and sing to a popular 80's tune.
 'You will need a speaker, be sure to set the correct pin number.
 
 '{$STAMP BS2}
